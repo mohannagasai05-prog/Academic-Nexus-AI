@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.exe
+data/uploads/*
+!data/uploads/.gitkeep
+.env
+*.db-journal

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Nexus AI - Student Operating System</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- KaTeX for Math Formatting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-slate-900 text-slate-100 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col justify-between p-4 flex-shrink-0">
+        <div>
+            <!-- Logo Header -->
+            <div class="flex items-center gap-3 px-3 py-2 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-graduation-cap text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base tracking-wide text-white">Academic Nexus</h1>
+                    <p class="text-xs text-indigo-400 font-medium">Student AI OS v1.0</p>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="space-y-1">
+                <div onclick="switchTab('dashboard')" id="nav-dashboard" class="sidebar-link active">
+                    <i class="fa-solid fa-chart-pie w-5"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div onclick="switchTab('analyzer')" id="nav-analyzer" class="sidebar-link">
+                    <i class="fa-solid fa-file-contract w-5"></i>
+                    <span>AI Analyzer</span>
+                </div>
+                <div onclick="switchTab('solver')" id="nav-solver" class="sidebar-link">
+                    <i class="fa-solid fa-calculator w-5"></i>
+                    <span>Problem Solver</span>
+                </div>
+                <div onclick="switchTab('tracker')" id="nav-tracker" class="sidebar-link">
+                    <i class="fa-solid fa-calendar-check w-5"></i>
+                    <span>Exam Tracker</span>
+                </div>
+                <div onclick="switchTab('schedule')" id="nav-schedule" class="sidebar-link">
+                    <i class="fa-solid fa-clock w-5"></i>
+                    <span>Schedule Maker</span>
+                </div>
+                <div onclick="switchTab('direction_bot')" id="nav-direction_bot" class="sidebar-link">
+                    <i class="fa-solid fa-compass w-5"></i>
+                    <span>Direction Bot</span>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Footer / API Key Settings Trigger -->
+        <div class="border-t border-slate-800 pt-4">
+            <button onclick="toggleSettingsModal()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs text-slate-300 transition">
+                <span class="flex items-center gap-2">
+                    <i class="fa-solid fa-key text-amber-400"></i>
+                    <span id="api-status-text">API Settings</span>
+                </span>
+                <i class="fa-solid fa-chevron-right text-slate-500"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col overflow-hidden bg-slate-900">
+        <!-- Top Navigation Bar -->
+        <header class="h-16 border-b border-slate-800 px-6 flex items-center justify-between bg-slate-950/50 backdrop-blur-md">
+            <div class="flex items-center gap-3">
+                <h2 id="current-tab-title" class="text-lg font-semibold text-white">Dashboard Overview</h2>
+                <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2.5 py-1 rounded-full border border-indigo-500/20">AI Active</span>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div id="user-profile-display">
+                    <!-- Auth / Profile Status inserted by auth.js -->
+                </div>
+
+                <button onclick="switchTab('direction_bot')" class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-xs px-3.5 py-2 rounded-lg font-medium shadow-md shadow-indigo-600/20 transition">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Ask Nexus Guide</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic Body Container -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6" id="main-content">
+            
+            <!-- SECTION 1: DASHBOARD OVERVIEW -->
+            <div id="tab-dashboard" class="tab-page space-y-6">
+                <!-- Welcome Card -->
+                <div class="glass-panel p-6 bg-gradient-to-r from-indigo-900/40 to-slate-800 border-indigo-500/20 relative overflow-hidden">
+                    <div class="max-w-2xl">
+                        <h3 class="text-2xl font-bold text-white mb-2">Welcome to your Academic Nexus! 🎓</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                            Your unified AI workspace for exam tracking, automatic study scheduling, document analysis, and step-by-step problem solving.
+                        </p>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="switchTab('tracker')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-lg font-medium transition flex items-center gap-2">
+                                <i class="fa-solid fa-plus"></i> Add Upcoming Exam
+                            </button>
+                            <button onclick="switchTab('schedule')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 border border-slate-700">
+                                <i class="fa-solid fa-wand-magic"></i> Generate Study Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="glass-panel p-4 flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl border border-red-500/20">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Next Exam</p>
+                            <h4 id="dash-next-exam" class="text-lg font-bold text-white">Loading...</h4>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-4 flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl border border-emerald-500/20">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Today's Study Goal</p>
+                            <h4 id="dash-study-hours" class="text-lg font-bold text-white">4.0 Hours</h4>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-4 flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl border border-blue-500/20">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Docs Analyzed</p>
+                            <h4 id="dash-doc-count" class="text-lg font-bold text-white">0 Uploaded</h4>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-4 flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl border border-amber-500/20">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Problems Solved</p>
+                            <h4 id="dash-solved-count" class="text-lg font-bold text-white">Ready</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Split View -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Urgent Exams Card -->
+                    <div class="glass-panel p-5 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h4 class="font-semibold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-fire text-red-400"></i> Upcoming Exams
+                            </h4>
+                            <button onclick="switchTab('tracker')" class="text-xs text-indigo-400 hover:underline">View All</button>
+                        </div>
+                        <div id="dash-exams-list" class="space-y-3">
+                            <p class="text-xs text-slate-500 py-4 text-center">No exams scheduled yet.</p>
+                        </div>
+                    </div>
+
+                    <!-- Today's Schedule Overview -->
+                    <div class="glass-panel p-5 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h4 class="font-semibold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-indigo-400"></i> Today's Timetable
+                            </h4>
+                            <button onclick="switchTab('schedule')" class="text-xs text-indigo-400 hover:underline">Full Schedule</button>
+                        </div>
+                        <div id="dash-schedule-list" class="space-y-3">
+                            <p class="text-xs text-slate-500 py-4 text-center">Click "Generate Study Plan" to build your daily timetable.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: AI ANALYZER -->
+            <div id="tab-analyzer" class="tab-page hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Upload & Document Metadata Panel -->
+                    <div class="glass-panel p-5 space-y-4">
+                        <h3 class="font-semibold text-white text-base flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up text-indigo-400"></i> Upload Study Material
+                        </h3>
+                        <p class="text-xs text-slate-400">Upload course PDFs, lecture notes, or textbooks for instant analysis.</p>
+
+                        <div id="drop-zone" class="border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-xl p-6 text-center cursor-pointer transition bg-slate-950/40">
+                            <i class="fa-solid fa-file-pdf text-3xl text-indigo-400 mb-2"></i>
+                            <p class="text-xs font-medium text-slate-300">Click or Drag PDF / TXT here</p>
+                            <input type="file" id="file-input" class="hidden" accept=".pdf,.txt,.md">
+                        </div>
+
+                        <div id="upload-status" class="hidden p-3 rounded-lg text-xs"></div>
+
+                        <!-- Active Document Info -->
+                        <div id="doc-meta-card" class="hidden glass-panel p-4 space-y-2 bg-slate-900 border-slate-700">
+                            <span class="text-xs text-indigo-400 font-semibold block">ACTIVE DOCUMENT</span>
+                            <h4 id="active-doc-name" class="text-sm font-bold text-white truncate">--</h4>
+                            <p id="active-doc-words" class="text-xs text-slate-400">0 words extracted</p>
+                        </div>
+                    </div>
+
+                    <!-- Analysis Output Panel (Summary & Flashcards) -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <!-- Controls Tab Bar -->
+                        <div class="flex items-center gap-2 border-b border-slate-800 pb-2">
+                            <button id="btn-summary" onclick="switchAnalyzerSubTab('summary')" class="px-4 py-2 text-xs font-semibold text-indigo-400 border-b-2 border-indigo-500">
+                                <i class="fa-solid fa-align-left mr-1"></i> Executive Summary
+                            </button>
+                            <button id="btn-flashcards" onclick="switchAnalyzerSubTab('flashcards')" class="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-slate-200">
+                                <i class="fa-solid fa-layer-group mr-1"></i> AI Flashcards
+                            </button>
+                            <button id="btn-qa" onclick="switchAnalyzerSubTab('qa')" class="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-slate-200">
+                                <i class="fa-solid fa-comments mr-1"></i> Document Q&A
+                            </button>
+                        </div>
+
+                        <!-- Sub-tab 1: Executive Summary -->
+                        <div id="analyzer-sub-summary" class="glass-panel p-6 space-y-4">
+                            <h4 class="text-sm font-bold text-white uppercase tracking-wider text-indigo-400">Key Academic Concepts</h4>
+                            <div id="key-concepts-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <p class="text-xs text-slate-500 col-span-2 py-4">Upload a document to view AI extracted concepts.</p>
+                            </div>
+                            
+                            <h4 class="text-sm font-bold text-white uppercase tracking-wider text-indigo-400 pt-4 border-t border-slate-800">Full Text Summary</h4>
+                            <div id="summary-text-container" class="text-xs leading-relaxed text-slate-300 space-y-3">
+                                <p class="text-slate-500">No document analyzed yet.</p>
+                            </div>
+                        </div>
+
+                        <!-- Sub-tab 2: Flashcards -->
+                        <div id="analyzer-sub-flashcards" class="glass-panel p-6 hidden space-y-4">
+                            <h4 class="text-sm font-bold text-white">Generated Study Flashcards</h4>
+                            <div id="flashcards-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <p class="text-xs text-slate-500 col-span-2 py-4">Upload a document to generate flashcards.</p>
+                            </div>
+                        </div>
+
+                        <!-- Sub-tab 3: Grounded Q&A -->
+                        <div id="analyzer-sub-qa" class="glass-panel p-6 hidden space-y-4">
+                            <h4 class="text-sm font-bold text-white">Ask Questions Grounded in Document</h4>
+                            <div id="qa-chat-box" class="h-64 overflow-y-auto p-3 bg-slate-950/50 rounded-xl space-y-3 border border-slate-800">
+                                <div class="bg-indigo-950/40 p-3 rounded-lg border border-indigo-500/20 text-xs">
+                                    <strong>AI Analyzer:</strong> Ask me anything about your uploaded document, definitions, or equations!
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <input type="text" id="qa-input" placeholder="e.g. What is the definition of entropy in section 2?" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                                <button onclick="sendDocumentQA()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-xs font-semibold">Ask</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: PROBLEM SOLVER -->
+            <div id="tab-solver" class="tab-page hidden space-y-6">
+                <div class="glass-panel p-6 space-y-4">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-calculator text-indigo-400"></i> AI Step-by-Step Problem Solver
+                            </h3>
+                            <p class="text-xs text-slate-400">Enter math equations, physics problems, coding logic, or chemistry reactions.</p>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs text-slate-400">Category:</label>
+                            <select id="solver-category" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white">
+                                <option value="Mathematics & Calculus">Mathematics & Calculus</option>
+                                <option value="Physics & Engineering">Physics & Engineering</option>
+                                <option value="Computer Science & Data">Computer Science & Data</option>
+                                <option value="Chemistry & Science">Chemistry & Science</option>
+                                <option value="General Logic & Reasoning">General Logic & Reasoning</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Input Box -->
+                    <div class="space-y-2">
+                        <textarea id="solver-input" rows="3" placeholder="e.g. Find the derivative of f(x) = 3x^3 - 5x^2 + 7x - 12 with respect to x" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-indigo-500"></textarea>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex gap-2">
+                                <button onclick="setSampleProblem('Solve: d/dx (x^4 + 3x^2 - 7)')" class="text-xs bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded text-slate-300">Sample Calculus</button>
+                                <button onclick="setSampleProblem('Solve for x: x^2 - 7x + 12 = 0')" class="text-xs bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded text-slate-300">Sample Algebra</button>
+                            </div>
+                            <button onclick="executeProblemSolver()" class="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white px-5 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 shadow-lg shadow-indigo-600/30">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Solve Problem
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solution Output Panel -->
+                <div id="solver-output-container" class="hidden glass-panel p-6 space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <h4 id="solver-title" class="text-base font-bold text-white">Solution Breakdown</h4>
+                        <span id="solver-category-badge" class="bg-indigo-500/10 text-indigo-400 text-xs px-2.5 py-1 rounded-full border border-indigo-500/20">Category</span>
+                    </div>
+
+                    <!-- Given & Formulas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                            <span class="text-xs text-slate-400 font-semibold block mb-1">GIVEN / PREMISES</span>
+                            <p id="solver-given" class="text-xs text-slate-200">--</p>
+                        </div>
+                        <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                            <span class="text-xs text-slate-400 font-semibold block mb-1">FORMULAS & THEOREMS USED</span>
+                            <div id="solver-formulas" class="text-xs text-indigo-300 math-rendered">--</div>
+                        </div>
+                    </div>
+
+                    <!-- Steps Timeline -->
+                    <div class="space-y-4">
+                        <h5 class="text-xs font-bold uppercase tracking-wider text-slate-400">Step-by-Step Derivation</h5>
+                        <div id="solver-steps" class="space-y-3">
+                            <!-- Steps dynamically inserted -->
+                        </div>
+                    </div>
+
+                    <!-- Final Answer Highlight -->
+                    <div class="bg-emerald-950/40 border border-emerald-500/30 p-4 rounded-xl space-y-1">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wide">FINAL ANSWER</span>
+                        <div id="solver-final-answer" class="text-sm font-bold text-white">--</div>
+                    </div>
+
+                    <!-- Practice Problem -->
+                    <div class="bg-indigo-950/30 border border-indigo-500/20 p-4 rounded-xl flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-indigo-400 block">PRACTICE REINFORCEMENT</span>
+                            <p id="solver-practice" class="text-xs text-slate-300">--</p>
+                        </div>
+                        <button onclick="copyPracticeProblem()" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg">Try This</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: EXAM SCHEDULE TRACKER -->
+            <div id="tab-tracker" class="tab-page hidden space-y-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-indigo-400"></i> Academic Exam Schedule Tracker
+                        </h3>
+                        <p class="text-xs text-slate-400">Track upcoming exam dates, course weightages, topics, and real-time countdowns.</p>
+                    </div>
+
+                    <button onclick="toggleAddExamModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-lg font-semibold flex items-center gap-2 shadow-lg shadow-indigo-600/30">
+                        <i class="fa-solid fa-plus"></i> Add New Exam
+                    </button>
+                </div>
+
+                <!-- Exam Cards Grid -->
+                <div id="exam-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dynamic exam cards inserted here -->
+                </div>
+            </div>
+
+            <!-- SECTION 5: SCHEDULE MAKER -->
+            <div id="tab-schedule" class="tab-page hidden space-y-6">
+                <div class="glass-panel p-6 space-y-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-clock text-indigo-400"></i> Automated AI Schedule Maker
+                            </h3>
+                            <p class="text-xs text-slate-400">Generate an optimized study timetable based on your exam dates, difficulty ratings, and target study hours.</p>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs text-slate-400">Target Study:</label>
+                                <select id="sched-hours" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white">
+                                    <option value="2.0">2 Hours/Day</option>
+                                    <option value="4.0" selected>4 Hours/Day</option>
+                                    <option value="6.0">6 Hours/Day</option>
+                                    <option value="8.0">8 Hours/Day (Intensive)</option>
+                                </select>
+                            </div>
+                            
+                            <button onclick="generateSchedule()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-lg font-semibold flex items-center gap-2 shadow-lg shadow-indigo-600/30">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Timetable
+                            </button>
+
+                            <button onclick="exportICS()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs px-3.5 py-2 rounded-lg font-semibold flex items-center gap-2">
+                                <i class="fa-solid fa-download"></i> Export iCal (.ics)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Timetable Sessions View -->
+                    <div id="schedule-container" class="space-y-4">
+                        <!-- Timetable cards grouped by date -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 6: DIRECTION BOT -->
+            <div id="tab-direction_bot" class="tab-page hidden space-y-6">
+                <div class="glass-panel p-6 space-y-4 h-[calc(100vh-140px)] flex flex-col">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center text-white">
+                                <i class="fa-solid fa-compass text-base"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-white">Nexus Direction Assistant</h3>
+                                <p class="text-xs text-slate-400">Ask for study advice, platform navigation, or academic path planning</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Log -->
+                    <div id="direction-chat-log" class="flex-1 overflow-y-auto space-y-4 p-4 bg-slate-950/40 rounded-xl border border-slate-800">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-xs flex-shrink-0">
+                                <i class="fa-solid fa-compass"></i>
+                            </div>
+                            <div class="bg-slate-800 p-3.5 rounded-xl rounded-tl-none text-xs text-slate-200 max-w-xl space-y-2">
+                                <p>Hello! I am your <strong>Academic Nexus Guide</strong>. How can I assist you today?</p>
+                                <p>I can direct you to tools on the platform or help you craft study strategies for your upcoming exams.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Prompt Suggestions -->
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <button onclick="sendDirectionPrompt('How do I organize my study plan for 3 exams?')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700">How do I organize my study plan?</button>
+                        <button onclick="sendDirectionPrompt('Where do I upload my lecture slides to generate flashcards?')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700">Where do I upload lecture slides?</button>
+                        <button onclick="sendDirectionPrompt('How do I solve calculus derivatives step by step?')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700">How to solve math step by step?</button>
+                    </div>
+
+                    <!-- Input Bar -->
+                    <div class="flex gap-2">
+                        <input type="text" id="direction-input" placeholder="Ask Nexus Guide for directions or advice..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <button onclick="sendDirectionChat()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2">
+                            <span>Send</span>
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal 1: Add Exam Modal -->
+    <div id="modal-add-exam" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="glass-panel p-6 w-full max-w-md space-y-4 bg-slate-900 border-slate-700">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h4 class="font-bold text-white text-base">Add Upcoming Exam</h4>
+                <button onclick="toggleAddExamModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form id="form-add-exam" onsubmit="submitNewExam(event)" class="space-y-3">
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Subject Name *</label>
+                    <input type="text" id="exam-subject" required placeholder="e.g. Linear Algebra & Calculus" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Course Code</label>
+                        <input type="text" id="exam-code" placeholder="MATH201" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Exam Date & Time *</label>
+                        <input type="datetime-local" id="exam-date" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Grade Weightage (%)</label>
+                        <input type="number" id="exam-weightage" value="30" min="1" max="100" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Difficulty (1-5)</label>
+                        <input type="number" id="exam-difficulty" value="4" min="1" max="5" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Syllabus Topics</label>
+                    <input type="text" id="exam-topics" placeholder="Eigenvalues, Vector Spaces, Matrix Transformations" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white">
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="toggleAddExamModal()" class="px-4 py-2 rounded-lg text-xs bg-slate-800 text-slate-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold">Save Exam</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: API Settings Modal -->
+    <div id="modal-settings" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="glass-panel p-6 w-full max-w-md space-y-4 bg-slate-900 border-slate-700">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h4 class="font-bold text-white text-base">API Settings</h4>
+                <button onclick="toggleSettingsModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="space-y-3">
+                <p class="text-xs text-slate-400">Optional: Enter your Google Gemini API Key for enhanced AI reasoning. (If left blank, built-in heuristic reasoning engines are used).</p>
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Gemini API Key</label>
+                    <input type="password" id="setting-gemini-key" placeholder="AIzaSy..." class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="toggleSettingsModal()" class="px-4 py-2 rounded-lg text-xs bg-slate-800 text-slate-300">Close</button>
+                    <button type="button" onclick="saveSettings()" class="px-4 py-2 rounded-lg text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold">Save Key</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Student Authentication Modal (Sign In / Register) -->
+    <div id="modal-auth" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="glass-panel p-6 w-full max-w-sm space-y-4 bg-slate-900 border-slate-700 shadow-2xl">
+            <div class="flex items-center justify-center gap-3 pb-2">
+                <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-base text-white">Student Portal</h3>
+                    <p class="text-xs text-indigo-400">Academic Nexus OS</p>
+                </div>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="flex border-b border-slate-800 text-center">
+                <button id="tab-btn-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold border-b-2 border-indigo-500 text-indigo-400">Sign In</button>
+                <button id="tab-btn-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-white">Register (Sign Up)</button>
+            </div>
+
+            <div id="auth-error" class="hidden p-2.5 rounded-lg bg-red-950/60 text-red-300 text-xs border border-red-500/30"></div>
+
+            <!-- Form 1: Login -->
+            <form id="form-login" onsubmit="handleStudentLogin(event)" class="space-y-3">
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Student Roll Number *</label>
+                    <input type="text" id="login-roll" required placeholder="e.g. 21CS001" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white uppercase font-mono">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Password *</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white">
+                </div>
+                <button type="submit" class="w-full py-2.5 rounded-lg text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition shadow-lg shadow-indigo-600/30">
+                    Sign In to Dashboard
+                </button>
+            </form>
+
+            <!-- Form 2: Sign Up -->
+            <form id="form-signup" onsubmit="handleStudentSignup(event)" class="hidden space-y-3">
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Student Roll Number *</label>
+                    <input type="text" id="signup-roll" required placeholder="e.g. 21CS001" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white uppercase font-mono">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Full Name *</label>
+                    <input type="text" id="signup-name" required placeholder="e.g. Alex Johnson" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Password *</label>
+                    <input type="password" id="signup-password" required minlength="4" placeholder="At least 4 characters" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white">
+                </div>
+                <button type="submit" class="w-full py-2.5 rounded-lg text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition shadow-lg shadow-emerald-600/30">
+                    Create Student Account
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Bundle Modules -->
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/analyzer.js"></script>
+    <script src="/static/js/solver.js"></script>
+    <script src="/static/js/tracker.js"></script>
+    <script src="/static/js/schedule.js"></script>
+    <script src="/static/js/direction_bot.js"></script>
+</body>
+</html>

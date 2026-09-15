@@ -1,0 +1,1 @@
+Artificial Intelligence in Higher Education. Machine learning models analyze student study habits to optimize learning outcomes. Key concepts include Neural Networks, Vector Databases, and Chain of Thought Reasoning.
