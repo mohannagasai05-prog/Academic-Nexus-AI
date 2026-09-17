@@ -22,8 +22,8 @@ if __name__ == "__main__":
     print("=" * 65)
     print(" Initializing database tables...")
     init_db()
-    print(" Starting server on http://localhost:8000")
+    print(" Starting server on http://0.0.0.0:8000")
     print(" Press Ctrl+C to stop the server.")
     print("=" * 65)
     
-    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True)
