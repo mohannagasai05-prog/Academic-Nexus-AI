@@ -3,6 +3,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     checkHealth();
     loadDashboardOverview();
+    initTheme();
+    if (typeof initPomodoro === 'function') initPomodoro();
+    if (typeof initTasksAndBookmarks === 'function') initTasksAndBookmarks();
 });
 
 function getUserId() {
@@ -24,18 +27,52 @@ function switchTab(tabId) {
     }
 
     const titles = {
-        'dashboard': 'Dashboard Overview',
+        'dashboard': 'Dashboard Overview & Tasks',
         'analyzer': 'AI Document Analyzer & Flashcards',
         'solver': 'AI Step-by-Step Problem Solver',
         'tracker': 'Academic Exam Schedule Tracker',
         'schedule': 'Automated AI Schedule Maker',
-        'direction_bot': 'Nexus Direction Assistant'
+        'direction_bot': 'Nexus Direction Assistant',
+        'pomodoro': 'Pomodoro Focus Timer & Ambient Audio',
+        'gpa': 'SGPA & CGPA Academic Target Calculator'
     };
-    document.getElementById('current-tab-title').innerText = titles[tabId] || 'Academic Nexus';
+    document.getElementById('current-tab-title').innerText = titles[tabId] || 'Academic Nexus AI';
 
     if (tabId === 'tracker') loadExams();
     if (tabId === 'schedule') loadSchedule();
     if (tabId === 'dashboard') loadDashboardOverview();
+    if (tabId === 'gpa' && typeof renderGpaCalculator === 'function') renderGpaCalculator();
+}
+
+// Multi-Theme Controller
+function initTheme() {
+    const savedTheme = localStorage.getItem('nexus_theme') || 'obsidian';
+    setTheme(savedTheme);
+}
+
+function setTheme(themeName) {
+    if (themeName === 'obsidian') {
+        document.documentElement.removeAttribute('data-theme');
+    } else {
+        document.documentElement.setAttribute('data-theme', themeName);
+    }
+    localStorage.setItem('nexus_theme', themeName);
+    
+    const themeSelect = document.getElementById('theme-select');
+    if (themeSelect) themeSelect.value = themeName;
+}
+
+// Live Public Link Modal
+function toggleLinkModal() {
+    const modal = document.getElementById('modal-share-link');
+    if (modal) modal.classList.toggle('hidden');
+}
+
+function copyLiveLink(urlId) {
+    const input = document.getElementById(urlId);
+    if (!input) return;
+    navigator.clipboard.writeText(input.value);
+    alert("🔗 Public URL copied to clipboard!\n" + input.value);
 }
 
 async function checkHealth() {
