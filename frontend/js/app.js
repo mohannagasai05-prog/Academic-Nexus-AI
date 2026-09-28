@@ -35,7 +35,8 @@ function switchTab(tabId) {
         'direction_bot': 'Nexus Direction Assistant',
         'pomodoro': 'Pomodoro Focus Timer & Ambient Audio',
         'gpa': 'SGPA & CGPA Academic Target Calculator',
-        'agents': 'AI Autonomous Agents Hub'
+        'agents': 'AI Autonomous Agents Hub',
+        'leetcode': 'LeetCode & DSA Code Arena'
     };
     document.getElementById('current-tab-title').innerText = titles[tabId] || 'Academic Nexus AI';
 
@@ -43,6 +44,7 @@ function switchTab(tabId) {
     if (tabId === 'schedule') loadSchedule();
     if (tabId === 'dashboard') loadDashboardOverview();
     if (tabId === 'gpa' && typeof renderGpaCalculator === 'function') renderGpaCalculator();
+    if (tabId === 'leetcode' && typeof initLeetCodeArena === 'function') initLeetCodeArena();
 }
 
 // Multi-Theme Controller

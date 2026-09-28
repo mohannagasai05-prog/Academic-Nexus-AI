@@ -16,6 +16,7 @@ from backend.services.direction_bot import get_direction_guidance
 from backend.services.exam_tracker import get_all_exams, create_exam, delete_exam
 from backend.services.schedule_maker import generate_study_schedule, get_saved_schedule, toggle_session_completed, generate_ics_calendar
 from backend.services.agents import run_agent_task
+from backend.services.leetcode import get_leetcode_problems, run_leetcode_code, get_leetcode_hint
 
 app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
 
@@ -204,4 +205,26 @@ class AgentTaskPayload(BaseModel):
 def api_run_agent(payload: AgentTaskPayload):
     result = run_agent_task(payload.agent_type, payload.user_prompt, payload.target_depth)
     return result
+
+# --- LeetCode & DSA Arena Endpoints ---
+class LeetCodeRunPayload(BaseModel):
+    problem_id: int
+    user_code: str
+
+class LeetCodeHintPayload(BaseModel):
+    problem_id: int
+    user_code: str
+
+@app.get("/api/leetcode/problems")
+def api_get_leetcode_problems():
+    return get_leetcode_problems()
+
+@app.post("/api/leetcode/run")
+def api_run_leetcode(payload: LeetCodeRunPayload):
+    return run_leetcode_code(payload.problem_id, payload.user_code)
+
+@app.post("/api/leetcode/hint")
+def api_leetcode_hint(payload: LeetCodeHintPayload):
+    return get_leetcode_hint(payload.problem_id, payload.user_code)
+
 

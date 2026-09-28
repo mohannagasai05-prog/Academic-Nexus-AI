@@ -49,6 +49,10 @@
                     <i class="fa-solid fa-calculator w-5"></i>
                     <span>Problem Solver</span>
                 </div>
+                <div onclick="switchTab('leetcode')" id="nav-leetcode" class="sidebar-link">
+                    <i class="fa-solid fa-code w-5 text-amber-400"></i>
+                    <span>LeetCode Arena</span>
+                </div>
                 <div onclick="switchTab('tracker')" id="nav-tracker" class="sidebar-link">
                     <i class="fa-solid fa-calendar-check w-5"></i>
                     <span>Exam Tracker</span>
@@ -738,6 +742,90 @@
                 </div>
             </div>
 
+            <!-- SECTION 10: LEETCODE & DSA CODE ARENA -->
+            <div id="tab-leetcode" class="tab-page hidden space-y-6">
+                <!-- Arena Header Banner -->
+                <div class="glass-panel p-5 bg-gradient-to-r from-amber-950/30 via-slate-900 to-slate-900 border-amber-500/20 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-500/30">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white">LeetCode & DSA Code Arena ⚡</h3>
+                            <p class="text-xs text-slate-400">Master Data Structures & Algorithms with real-time test execution and AI hints.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs text-slate-400">Solved: <strong id="lc-solved-count" class="text-amber-400 font-mono">0/5</strong></span>
+                    </div>
+                </div>
+
+                <!-- Main Arena Split Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Left Column: Problem Bank List & Problem Specification -->
+                    <div class="space-y-4">
+                        <div class="glass-panel p-4 space-y-3">
+                            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-list-ol text-amber-400"></i> Curated Problem Bank
+                            </h4>
+                            <div id="leetcode-problem-list" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                                <!-- Populated by leetcode.js -->
+                            </div>
+                        </div>
+
+                        <!-- Current Problem Statement Card -->
+                        <div class="glass-panel p-5 space-y-3">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                                <h4 id="lc-problem-title" class="font-bold text-white text-sm">Select a Problem</h4>
+                                <span id="lc-problem-diff" class="text-xs px-2 py-0.5 rounded-full font-bold">Easy</span>
+                            </div>
+                            <span id="lc-problem-category" class="text-[10px] text-indigo-400 font-mono block">Category</span>
+                            <p id="lc-problem-desc" class="text-xs text-slate-300 leading-relaxed font-sans">
+                                Select a problem from the list above to view requirements and write code.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Interactive Code Editor & Test Case Runner -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="glass-panel p-4 space-y-3">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-brands fa-python text-amber-400 text-sm"></i>
+                                    <span class="text-xs font-bold text-white font-mono">Python 3 Sandbox</span>
+                                </div>
+                                
+                                <div class="flex items-center gap-2">
+                                    <button onclick="getLeetCodeHint()" class="bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5">
+                                        <i class="fa-solid fa-lightbulb text-amber-400"></i> AI Hint
+                                    </button>
+                                    <button onclick="runLeetCodeSolution()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-4 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/20">
+                                        <i class="fa-solid fa-play"></i> Run Code
+                                    </button>
+                                </div>
+                            </div>
+
+                            <textarea id="lc-code-editor" rows="12" spellcheck="false" 
+                                class="w-full bg-slate-950 text-emerald-400 font-mono text-xs p-4 rounded-xl border border-slate-800 focus:outline-none focus:border-indigo-500 leading-relaxed shadow-inner"
+                                placeholder="# Write Python solution here..."></textarea>
+                        </div>
+
+                        <!-- Test Results & Output Execution Panel -->
+                        <div class="glass-panel p-4 space-y-3">
+                            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+                                <i class="fa-solid fa-square-poll-vertical text-indigo-400"></i> Test Suite Results & Runtime Metrics
+                            </h4>
+                            <div id="lc-test-results-panel">
+                                <p class="text-xs text-slate-500 text-center py-4">Click "Run Code" to execute test suite.</p>
+                            </div>
+                        </div>
+
+                        <!-- AI Hint Container -->
+                        <div id="lc-hint-output" class="empty:hidden"></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -923,5 +1011,6 @@
     <script src="/static/js/gpa.js"></script>
     <script src="/static/js/tasks.js"></script>
     <script src="/static/js/agents.js"></script>
+    <script src="/static/js/leetcode.js"></script>
 </body>
 </html>

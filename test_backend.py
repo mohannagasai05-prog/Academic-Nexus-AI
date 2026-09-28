@@ -101,6 +101,22 @@ def run_tests():
     assert "output" in res_agent.json()
     print("   ScholarAgent execution OK!")
 
+    print("9. LeetCode & DSA Code Arena...")
+    res_lc_probs = client.get("/api/leetcode/problems")
+    assert res_lc_probs.status_code == 200
+    probs = res_lc_probs.json()
+    assert len(probs) >= 5
+
+    # Run solution for Two Sum
+    two_sum_code = "def twoSum(nums: list[int], target: int) -> list[int]:\n    seen = {}\n    for i, n in enumerate(nums):\n        diff = target - n\n        if diff in seen:\n            return [seen[diff], i]\n        seen[n] = i\n"
+    res_lc_run = client.post("/api/leetcode/run", json={
+        "problem_id": 1,
+        "user_code": two_sum_code
+    })
+    assert res_lc_run.status_code == 200
+    assert res_lc_run.json()["is_accepted"] == True
+    print(f"   LeetCode Two Sum test suite executed: Status '{res_lc_run.json()['status']}' ({res_lc_run.json()['runtime_ms']} ms) ✅")
+
     print("\nALL PLATFORM FEATURES VERIFIED & WORKING PERFECTLY! 🚀✅")
 
 if __name__ == "__main__":
