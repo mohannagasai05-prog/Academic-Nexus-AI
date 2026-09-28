@@ -37,6 +37,10 @@
                     <i class="fa-solid fa-chart-pie w-5"></i>
                     <span>Dashboard</span>
                 </div>
+                <div onclick="switchTab('agents')" id="nav-agents" class="sidebar-link">
+                    <i class="fa-solid fa-robot w-5 text-indigo-400"></i>
+                    <span>AI Agents Hub</span>
+                </div>
                 <div onclick="switchTab('analyzer')" id="nav-analyzer" class="sidebar-link">
                     <i class="fa-solid fa-file-contract w-5"></i>
                     <span>AI Analyzer</span>
@@ -628,6 +632,112 @@
                 </div>
             </div>
 
+            <!-- SECTION 9: AI AUTONOMOUS AGENTS HUB -->
+            <div id="tab-agents" class="tab-page hidden space-y-6">
+                <!-- Agent Selector Header -->
+                <div class="glass-panel p-6 space-y-4 bg-gradient-to-r from-indigo-900/40 via-purple-900/20 to-slate-900 border-indigo-500/30">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Multi-Agent Workforce</span>
+                            <h3 class="text-2xl font-extrabold text-white mt-2 mb-1">AI Autonomous Agents Hub 🤖</h3>
+                            <p class="text-xs text-slate-300">Deploy specialized AI agents for research, coding, quiz generation, and literature citations.</p>
+                        </div>
+                    </div>
+
+                    <!-- Agent Selection Cards Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
+                        <!-- Agent 1: ScholarAgent -->
+                        <div id="agent-card-scholar" onclick="selectAgent('scholar')" class="agent-card-btn glass-panel p-4 cursor-pointer border-indigo-500 bg-indigo-600/10 hover:border-indigo-400 transition space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg border border-indigo-500/30">
+                                    <i class="fa-solid fa-microscope"></i>
+                                </div>
+                                <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full font-mono font-bold">Scholar</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-white">ScholarAgent</h4>
+                            <p class="text-[11px] text-slate-400">Deep research, first-principles derivations & theoretical analysis.</p>
+                        </div>
+
+                        <!-- Agent 2: CoderAgent -->
+                        <div id="agent-card-coder" onclick="selectAgent('coder')" class="agent-card-btn glass-panel p-4 cursor-pointer border-slate-800 bg-slate-950/40 hover:border-emerald-400 transition space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg border border-emerald-500/30">
+                                    <i class="fa-solid fa-code"></i>
+                                </div>
+                                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-mono font-bold">Coder</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-white">CoderAgent</h4>
+                            <p class="text-[11px] text-slate-400">Writes clean code, unit test suites, and line-by-line debugging.</p>
+                        </div>
+
+                        <!-- Agent 3: QuizAgent -->
+                        <div id="agent-card-quiz" onclick="selectAgent('quiz')" class="agent-card-btn glass-panel p-4 cursor-pointer border-slate-800 bg-slate-950/40 hover:border-amber-400 transition space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-500/30">
+                                    <i class="fa-solid fa-circle-question"></i>
+                                </div>
+                                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-mono font-bold">Quiz Master</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-white">QuizAgent</h4>
+                            <p class="text-[11px] text-slate-400">Generates practice MCQs, active recall challenges & explanations.</p>
+                        </div>
+
+                        <!-- Agent 4: CiteAgent -->
+                        <div id="agent-card-citation" onclick="selectAgent('citation')" class="agent-card-btn glass-panel p-4 cursor-pointer border-slate-800 bg-slate-950/40 hover:border-purple-400 transition space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg border border-purple-500/30">
+                                    <i class="fa-solid fa-quote-left"></i>
+                                </div>
+                                <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full font-mono font-bold">Citation</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-white">CiteAgent</h4>
+                            <p class="text-[11px] text-slate-400">APA 7th, MLA 9th, IEEE bibliography formatting & synthesis.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Prompt Box & Agent Execution -->
+                <div class="glass-panel p-5 space-y-4">
+                    <label class="text-xs text-slate-300 font-semibold block flex items-center gap-2">
+                        <i class="fa-solid fa-terminal text-indigo-400"></i> Dispatch Agent Task & Parameters
+                    </label>
+                    
+                    <div class="flex gap-2">
+                        <input type="text" id="agent-prompt-input" placeholder="e.g. Research Transformer architecture in deep learning and self-attention mechanisms..." 
+                            class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-indigo-500 font-mono">
+                        <button id="agent-run-btn" onclick="runAgentTask()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-6 py-3 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-indigo-600/30">
+                            <span>Dispatch Agent Task</span>
+                            <i class="fa-solid fa-bolt"></i>
+                        </button>
+                    </div>
+
+                    <!-- Quick Prompt Ideas -->
+                    <div class="flex flex-wrap gap-2 text-[11px] text-slate-400 pt-1">
+                        <span class="text-slate-500 font-bold">Quick Prompts:</span>
+                        <button onclick="setAgentPrompt('Deep research on Transformer Attention Mechanisms in NLP')" class="hover:text-indigo-400 underline">Transformer Research</button>
+                        <span>•</span>
+                        <button onclick="setAgentPrompt('Write Binary Search Tree insertion & deletion in Python')" class="hover:text-emerald-400 underline">BST Code Implementation</button>
+                        <span>•</span>
+                        <button onclick="setAgentPrompt('Practice quiz on OS Process Synchronization & Deadlocks')" class="hover:text-amber-400 underline">OS Quiz Sprint</button>
+                        <span>•</span>
+                        <button onclick="setAgentPrompt('Cite Vaswani et al. 2017 Attention Is All You Need paper')" class="hover:text-purple-400 underline">IEEE Citation</button>
+                    </div>
+                </div>
+
+                <!-- Agent Status & Execution Stream Output -->
+                <div id="agent-status-panel" class="hidden space-y-4">
+                    <!-- Reasoning steps chain -->
+                    <div id="agent-reasoning-steps" class="flex flex-wrap gap-3">
+                        <!-- Populated by agents.js -->
+                    </div>
+
+                    <!-- Main Output Container -->
+                    <div id="agent-output-container" class="glass-panel min-h-[300px]">
+                        <!-- Populated by agents.js -->
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -812,5 +922,6 @@
     <script src="/static/js/pomodoro.js"></script>
     <script src="/static/js/gpa.js"></script>
     <script src="/static/js/tasks.js"></script>
+    <script src="/static/js/agents.js"></script>
 </body>
 </html>

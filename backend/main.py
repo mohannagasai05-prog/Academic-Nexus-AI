@@ -15,6 +15,7 @@ from backend.services.problem_solver import solve_problem
 from backend.services.direction_bot import get_direction_guidance
 from backend.services.exam_tracker import get_all_exams, create_exam, delete_exam
 from backend.services.schedule_maker import generate_study_schedule, get_saved_schedule, toggle_session_completed, generate_ics_calendar
+from backend.services.agents import run_agent_task
 
 app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
 
@@ -192,3 +193,15 @@ class DirectionChatPayload(BaseModel):
 def api_direction_chat(payload: DirectionChatPayload):
     guidance = get_direction_guidance(payload.query)
     return guidance
+
+# --- AI Autonomous Agents Endpoints ---
+class AgentTaskPayload(BaseModel):
+    agent_type: str = "scholar"
+    user_prompt: str
+    target_depth: str = "comprehensive"
+
+@app.post("/api/agents/run")
+def api_run_agent(payload: AgentTaskPayload):
+    result = run_agent_task(payload.agent_type, payload.user_prompt, payload.target_depth)
+    return result
+

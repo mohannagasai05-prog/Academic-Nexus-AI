@@ -34,7 +34,8 @@ function switchTab(tabId) {
         'schedule': 'Automated AI Schedule Maker',
         'direction_bot': 'Nexus Direction Assistant',
         'pomodoro': 'Pomodoro Focus Timer & Ambient Audio',
-        'gpa': 'SGPA & CGPA Academic Target Calculator'
+        'gpa': 'SGPA & CGPA Academic Target Calculator',
+        'agents': 'AI Autonomous Agents Hub'
     };
     document.getElementById('current-tab-title').innerText = titles[tabId] || 'Academic Nexus AI';
 

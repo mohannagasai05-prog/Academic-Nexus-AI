@@ -92,6 +92,15 @@ def run_tests():
     assert res_bot.status_code == 200
     print("   Direction Bot guidance OK!")
 
+    print("8. AI Autonomous Agents Hub...")
+    res_agent = client.post("/api/agents/run", json={
+        "agent_type": "scholar",
+        "user_prompt": "Explain Transformer Self-Attention mechanism"
+    })
+    assert res_agent.status_code == 200
+    assert "output" in res_agent.json()
+    print("   ScholarAgent execution OK!")
+
     print("\nALL PLATFORM FEATURES VERIFIED & WORKING PERFECTLY! 🚀✅")
 
 if __name__ == "__main__":
